@@ -153,6 +153,9 @@ exports.asObjectType = function (type, line) {
     return;
   }
   if ('postfix/' === type.substr(0,8)) type = type.substr(8);
+  // check if whe have multi instance like postfix/server1/smtpd 
+  // and grab the last
+  if (/\//.test(type)) type = type.substr(type.lastIndexOf('/') + 1)
 
   switch (type) {
     case 'qmgr':
