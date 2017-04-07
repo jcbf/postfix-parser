@@ -26,6 +26,12 @@ var regex = {
       '(dsn)=([^,]+), ' +
       '(status)=(.*)$'
       ),
+  'smtp-response' : new RegExp ('([a-z]+) \\((.*)\\)$'),
+  'smtp-details' : new RegExp (
+    'host ([^ ]+) ' +
+    '(?:said|refused to talk to me): ' +
+    '(.+) \\(in reply to.*'
+     ),
   'smtp-defer': new RegExp(
       '^(?:(' + postfixQidAny + '): )?' +
       '(?:host) ([^ ]+) ' +
@@ -153,6 +159,9 @@ exports.asObjectType = function (type, line) {
     return;
   }
   if ('postfix/' === type.substr(0,8)) type = type.substr(8);
+  // check if whe have multi instance like postfix/server1/smtpd 
+  // and grab the last
+  if (/\//.test(type)) type = type.substr(type.lastIndexOf('/') + 1)
 
   switch (type) {
     case 'qmgr':
@@ -220,7 +229,20 @@ function argAsObject (thing, line) {
 
 function smtpAsObject (line) {
   var match = line.match(regex.smtp);
-  if (match) return matchAsObject(match);
+  if (match) {
+    var obj = matchAsObject(match);
+    var text = obj["status"];
+    if (text) {
+      var textmatch = text.match(regex['smtp-response']);
+      obj["status"]   = textmatch[1]
+      obj["response"] = textmatch[2];
+      textmatch = text.match(regex['smtp-details']);
+      if (textmatch) {
+       obj["response"]  = textmatch[2];
+      }
+    }
+    return obj
+  }
 
   match = line.match(regex['smtp-conn-err']);
   if (match) {
