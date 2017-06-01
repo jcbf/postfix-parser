@@ -8,15 +8,15 @@
     "maillog",
     "mail.log"
   ],
-  "version": "1.0.5",
+  "version": "2.0.5",
   "private": false,
-  "homepage": "https://github.com/DoubleCheck/postfix-parser",
+  "homepage": "https://github.com/jcbf/postfix-parser",
   "author": {
     "name": "Matt Simerson"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/DoubleCheck/postfix-parser.git"
+    "url": "git://github.com/jcbf/postfix-parser.git"
   },
   "main": "index.js",
   "engines": {
@@ -31,7 +31,7 @@
     "mocha": "*"
   },
   "bugs": {
-    "url": "https://github.com/DoubleCheck/postfix-parser/issues"
+    "url": "https://github.com/jcbf/postfix-parser/issues"
   },
   "license": "BSD-2-Clause",
   "scripts": {
